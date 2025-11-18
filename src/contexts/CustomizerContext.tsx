@@ -1,6 +1,6 @@
 'use client'
 
-import React, { createContext, useContext, useState, ReactNode } from 'react'
+import React, { createContext, useContext, useState, useCallback, useMemo, ReactNode } from 'react'
 import {
   Product,
   PartCustomization,
@@ -31,7 +31,7 @@ export function CustomizerProvider({ children }: { children: ReactNode }) {
   const [currentStep, setCurrentStep] =
     useState<CustomizerState['currentStep']>('product')
 
-  const updatePartCustomization = (
+  const updatePartCustomization = useCallback((
     partId: string,
     customization: Partial<PartCustomization>
   ) => {
@@ -44,9 +44,9 @@ export function CustomizerProvider({ children }: { children: ReactNode }) {
         patternId: customization.patternId || prev[partId]?.patternId || PATTERNS[0].id,
       },
     }))
-  }
+  }, [])
 
-  const calculateTotalPrice = (): number => {
+  const calculateTotalPrice = useCallback((): number => {
     if (!selectedProduct) return 0
 
     let total = selectedProduct.basePrice
@@ -60,30 +60,38 @@ export function CustomizerProvider({ children }: { children: ReactNode }) {
     })
 
     return total
-  }
+  }, [selectedProduct, customizations])
 
-  const resetCustomizer = () => {
+  const resetCustomizer = useCallback(() => {
     setSelectedProduct(null)
     setCustomizations({})
     setMeasurements(null)
     setCurrentStep('product')
-  }
+  }, [])
+
+  const value = useMemo(() => ({
+    selectedProduct,
+    customizations,
+    measurements,
+    currentStep,
+    setSelectedProduct,
+    updatePartCustomization,
+    setMeasurements,
+    setCurrentStep,
+    calculateTotalPrice,
+    resetCustomizer,
+  }), [
+    selectedProduct,
+    customizations,
+    measurements,
+    currentStep,
+    updatePartCustomization,
+    calculateTotalPrice,
+    resetCustomizer,
+  ])
 
   return (
-    <CustomizerContext.Provider
-      value={{
-        selectedProduct,
-        customizations,
-        measurements,
-        currentStep,
-        setSelectedProduct,
-        updatePartCustomization,
-        setMeasurements,
-        setCurrentStep,
-        calculateTotalPrice,
-        resetCustomizer,
-      }}
-    >
+    <CustomizerContext.Provider value={value}>
       {children}
     </CustomizerContext.Provider>
   )

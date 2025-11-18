@@ -6,7 +6,12 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "lint:fix": "next lint --fix",
+    "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx,json,css,md}\"",
+    "format:check": "prettier --check \"src/**/*.{js,jsx,ts,tsx,json,css,md}\"",
+    "type-check": "tsc --noEmit",
+    "clean": "rm -rf .next out node_modules/.cache"
   },
   "dependencies": {
     "react": "^18.3.1",
@@ -29,6 +34,11 @@
     "postcss": "^8.4.47",
     "tailwindcss": "^3.4.14",
     "eslint": "^8.57.1",
-    "eslint-config-next": "^14.2.15"
+    "eslint-config-next": "^14.2.15",
+    "prettier": "^3.1.0"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
   }
 }

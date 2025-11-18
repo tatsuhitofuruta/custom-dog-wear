@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { useCustomizer } from '@/contexts/CustomizerContext'
 import { getColorById } from '@/data/materials'
-import ThreeDPreview from './ThreeDPreview'
+import ThreeDPreview from './DynamicThreeDPreview'
 import { Box, Maximize2 } from 'lucide-react'
 
 export default function PreviewPanel() {
