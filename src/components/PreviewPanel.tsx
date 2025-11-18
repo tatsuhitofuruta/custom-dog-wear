@@ -1,10 +1,14 @@
 'use client'
 
+import { useState } from 'react'
 import { useCustomizer } from '@/contexts/CustomizerContext'
 import { getColorById } from '@/data/materials'
+import ThreeDPreview from './ThreeDPreview'
+import { Box, Maximize2 } from 'lucide-react'
 
 export default function PreviewPanel() {
   const { selectedProduct, customizations } = useCustomizer()
+  const [viewMode, setViewMode] = useState<'2d' | '3d'>('3d')
 
   if (!selectedProduct) return null
 
@@ -19,15 +23,42 @@ export default function PreviewPanel() {
 
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 sticky top-24">
-      <h2 className="text-2xl font-bold mb-4">プレビュー</h2>
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-2xl font-bold">プレビュー</h2>
+        <div className="flex gap-2">
+          <button
+            onClick={() => setViewMode('2d')}
+            className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+              viewMode === '2d'
+                ? 'bg-orange-600 text-white'
+                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+            }`}
+          >
+            <Maximize2 className="w-4 h-4" />
+          </button>
+          <button
+            onClick={() => setViewMode('3d')}
+            className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+              viewMode === '3d'
+                ? 'bg-orange-600 text-white'
+                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+            }`}
+          >
+            <Box className="w-4 h-4" />
+          </button>
+        </div>
+      </div>
       <p className="text-gray-600 mb-6">
         選択した内容がリアルタイムで反映されます
       </p>
 
-      {/* 簡易的な2Dプレビュー */}
-      <div className="relative aspect-square bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg overflow-hidden flex items-center justify-center">
-        {/* 犬服のシンプルな表現 */}
-        <div className="relative w-3/4 h-3/4">
+      {/* プレビュー */}
+      <div className="relative aspect-square bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg overflow-hidden">
+        {viewMode === '3d' ? (
+          <ThreeDPreview />
+        ) : (
+          <div className="flex items-center justify-center h-full">
+            <div className="relative w-3/4 h-3/4">
           {selectedProduct.id === 'hoodie' && (
             <HoodiePreview
               neckColor={getPartColor('neck')}
@@ -67,12 +98,9 @@ export default function PreviewPanel() {
               hemColor={getPartColor('hem')}
             />
           )}
-        </div>
-
-        {/* 3D風の装飾 */}
-        <div className="absolute bottom-4 right-4 text-sm text-gray-400">
-          ドラッグで回転 (3D機能は開発中)
-        </div>
+            </div>
+          </div>
+        )}
       </div>
 
       <div className="mt-6">

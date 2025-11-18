@@ -1,0 +1,24 @@
+# AWS Region
+aws_region = "ap-northeast-1"
+
+# Environment (dev, staging, production)
+environment = "production"
+
+# Project name
+project_name = "custom-dog-wear"
+
+# Domain name (optional, leave empty to use CloudFront domain)
+domain_name = ""
+
+# ACM Certificate ARN (must be in us-east-1 for CloudFront)
+# Get this from AWS Certificate Manager after creating a certificate
+certificate_arn = ""
+
+# Enable CloudFront CDN
+enable_cdn = true
+
+# Enable AWS WAF
+enable_waf = false
+
+# Force destroy S3 buckets (use with caution in production)
+s3_force_destroy = false
